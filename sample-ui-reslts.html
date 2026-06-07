@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Analyzer — Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-house-chimney text-blue-600 text-xl"></i>
+                <span class="font-bold text-xl text-gray-800">Property<span class="text-blue-600">Analyzer</span></span>
+            </div>
+            <button class="text-sm text-gray-600 hover:text-blue-600 flex items-center gap-1">
+                <i class="fas fa-rotate-right"></i> New Analysis
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto px-4 py-6 space-y-6">
+
+        <!-- 1. Property Summary Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex flex-wrap justify-between items-start gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                        <i class="fas fa-map-pin"></i> Strovolos, Nicosia
+                        <span class="px-2 py-0.5 bg-gray-100 rounded-full text-xs">Bazaraki</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-900">3 Bedroom Apartment</h1>
+                    <div class="flex flex-wrap gap-4 mt-2 text-sm">
+                        <span class="flex items-center gap-1"><i class="fas fa-arrows-alt text-gray-400"></i> 142 m²</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-bed text-gray-400"></i> 3 beds</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-bath text-gray-400"></i> 2 baths</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-calendar text-gray-400"></i> 2010</span>
+                        <span class="flex items-center gap-1"><i class="fas fa-check-circle text-green-500"></i> Renovated</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-gray-900">€250,000</div>
+                    <div class="text-sm text-gray-500">€1,760 / m²</div>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-6 text-sm">
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-500">Similarity threshold:</span>
+                    <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs font-medium">±10% size, same area</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-500">Comparables found:</span>
+                    <span class="font-semibold text-gray-900">12 properties</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Market Comparison / Verdict -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Left: Market Averages -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-blue-600"></i> Market Comparison
+                </h2>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Price</span>
+                            <span class="font-medium">€250,000 <span class="text-gray-400">vs</span> €263,000 avg</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2 mt-1">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 95%"></div>
+                        </div>
+                        <div class="text-xs text-green-600 mt-0.5 flex justify-end">✓ 4.9% below market</div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Price / m²</span>
+                            <span class="font-medium">€1,760 <span class="text-gray-400">vs</span> €1,888 avg</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2 mt-1">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 93%"></div>
+                        </div>
+                        <div class="text-xs text-green-600 mt-0.5 flex justify-end">✓ 6.8% below market</div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Year built</span>
+                            <span class="font-medium">2010 <span class="text-gray-400">vs</span> 2011 avg</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2 mt-1">
+                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 90%"></div>
+                        </div>
+                        <div class="text-xs text-yellow-600 mt-0.5 flex justify-end">1 year older</div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Condition</span>
+                            <span class="font-medium">Renovated <span class="text-gray-400">vs</span> Good avg</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2 mt-1">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                        </div>
+                        <div class="text-xs text-green-600 mt-0.5 flex justify-end">✓ Better than 80% of comps</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Verdict -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-gavel text-blue-600"></i> Verdict
+                </h2>
+                <div class="text-center py-4">
+                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-600 text-4xl mb-3">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-gray-900">Good Deal</div>
+                    <div class="text-sm text-gray-500">Score: 8.2 / 10</div>
+                </div>
+                <div class="space-y-2 text-sm bg-gray-50 rounded-lg p-3">
+                    <div class="flex items-start gap-2 text-green-700">
+                        <i class="fas fa-check-circle mt-0.5"></i>
+                        <span>€13,000 below market average</span>
+                    </div>
+                    <div class="flex items-start gap-2 text-green-700">
+                        <i class="fas fa-check-circle mt-0.5"></i>
+                        <span>€128/m² below average for the area</span>
+                    </div>
+                    <div class="flex items-start gap-2 text-green-700">
+                        <i class="fas fa-check-circle mt-0.5"></i>
+                        <span>Renovated condition vs typical "Good"</span>
+                    </div>
+                    <div class="flex items-start gap-2 text-yellow-600">
+                        <i class="fas fa-circle-exclamation mt-0.5"></i>
+                        <span>1 year older than market average</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Similar Properties Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-x-auto">
+            <h2 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <i class="fas fa-arrows-left-right text-blue-600"></i> Top 5 Most Similar Properties
+                <span class="ml-2 text-xs font-normal text-gray-500">Sorted by similarity score</span>
+            </h2>
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-gray-200 text-left text-gray-500 text-xs uppercase tracking-wider">
+                        <th class="py-2 px-3">#</th>
+                        <th class="py-2 px-3">Price</th>
+                        <th class="py-2 px-3">Price/m²</th>
+                        <th class="py-2 px-3">Size</th>
+                        <th class="py-2 px-3">Year</th>
+                        <th class="py-2 px-3">Condition</th>
+                        <th class="py-2 px-3 text-right">Similarity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 px-3 font-medium text-gray-900">1</td>
+                        <td class="py-3 px-3 font-medium">€255,000</td>
+                        <td class="py-3 px-3 text-gray-600">€1,821</td>
+                        <td class="py-3 px-3 text-gray-600">140 m²</td>
+                        <td class="py-3 px-3 text-gray-600">2011</td>
+                        <td class="py-3 px-3"><span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-xs">Good</span></td>
+                        <td class="py-3 px-3 text-right font-medium text-green-600">87%</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 px-3 font-medium text-gray-900">2</td>
+                        <td class="py-3 px-3 font-medium">€270,000</td>
+                        <td class="py-3 px-3 text-gray-600">€1,862</td>
+                        <td class="py-3 px-3 text-gray-600">145 m²</td>
+                        <td class="py-3 px-3 text-gray-600">2009</td>
+                        <td class="py-3 px-3"><span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-xs">Good</span></td>
+                        <td class="py-3 px-3 text-right font-medium text-yellow-600">81%</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 px-3 font-medium text-gray-900">3</td>
+                        <td class="py-3 px-3 font-medium">€245,000</td>
+                        <td class="py-3 px-3 text-gray-600">€1,775</td>
+                        <td class="py-3 px-3 text-gray-600">138 m²</td>
+                        <td class="py-3 px-3 text-gray-600">2008</td>
+                        <td class="py-3 px-3"><span class="px-2 py-0.5 bg-red-100 text-red-800 rounded-full text-xs">Needs work</span></td>
+                        <td class="py-3 px-3 text-right font-medium text-orange-500">69%</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 px-3 font-medium text-gray-900">4</td>
+                        <td class="py-3 px-3 font-medium">€280,000</td>
+                        <td class="py-3 px-3 text-gray-600">€2,030</td>
+                        <td class="py-3 px-3 text-gray-600">135 m²</td>
+                        <td class="py-3 px-3 text-gray-600">2015</td>
+                        <td class="py-3 px-3"><span class="px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-xs">Excellent</span></td>
+                        <td class="py-3 px-3 text-right font-medium text-orange-500">58%</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-3 px-3 font-medium text-gray-900">5</td>
+                        <td class="py-3 px-3 font-medium">€265,000</td>
+                        <td class="py-3 px-3 text-gray-600">€1,950</td>
+                        <td class="py-3 px-3 text-gray-600">144 m²</td>
+                        <td class="py-3 px-3 text-gray-600">2010</td>
+                        <td class="py-3 px-3"><span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full text-xs">Good</span></td>
+                        <td class="py-3 px-3 text-right font-medium text-orange-500">55%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="mt-4 text-xs text-gray-400 flex justify-between items-center border-t border-gray-100 pt-3">
+                <span>Showing 5 of 12 similar properties</span>
+                <button class="text-blue-600 hover:underline">View all 12 →</button>
+            </div>
+        </div>
+
+        <!-- 4. AI Reasoning (Optional enhancement) -->
+        <div class="bg-blue-50 rounded-xl border border-blue-200 p-5">
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot text-sm"></i>
+                </div>
+                <div>
+                    <div class="font-medium text-gray-900 text-sm">AI Reasoning</div>
+                    <div class="text-gray-700 text-sm mt-1 leading-relaxed">
+                        This property is a <strong>good deal</strong> primarily because it's priced <strong>€13,000 below market average</strong> for similar properties in Strovolos. The <strong>renovated condition</strong> adds value compared to most comps (which are "Good"). The <strong>price per square meter (€1,760)</strong> is 6.8% below average, making it attractive for both homebuyers and investors. The only drawback is it's 1 year older than the average comparable property.
+                    </div>
+                    <div class="mt-2 text-xs text-gray-500">Powered by GPT-4o · Confidence: High</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Action Buttons -->
+        <div class="flex flex-wrap gap-3">
+            <button class="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2">
+                <i class="fas fa-download"></i> Download Report
+            </button>
+            <button class="bg-white border border-gray-300 text-gray-700 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition flex items-center gap-2">
+                <i class="fas fa-share-nodes"></i> Share Analysis
+            </button>
+            <button class="bg-white border border-gray-300 text-gray-700 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition flex items-center gap-2">
+                <i class="fas fa-flag"></i> Report Inaccuracy
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center text-xs text-gray-400 border-t border-gray-200 mt-4">
+        PropertyAnalyzer © 2026 — Data from 5 Cyprus real estate sites. Not financial advice.
+    </div>
+
+</body>
+</html>
