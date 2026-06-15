@@ -9,7 +9,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Settings', href: '/admin/settings' },
 ];
 
-type Tab = 'api' | 'content';
+type Tab = 'api' | 'content' | 'notifications';
 
 const apiFields = [
     { key: 'firecrawl_api_key', label: 'Firecrawl API Key', type: 'password', placeholder: 'fc-...' },
@@ -27,6 +27,19 @@ const contentFields = [
     { key: 'content_tab_url_description', label: 'URL Tab Description', type: 'textarea' },
     { key: 'content_tab_url_placeholder', label: 'URL Input Placeholder', type: 'text' },
     { key: 'content_button_compare', label: 'Compare Button Text', type: 'text' },
+];
+
+const notificationFields = [
+    { key: 'smtp_host', label: 'SMTP Host', type: 'text', placeholder: 'smtp.example.com' },
+    { key: 'smtp_port', label: 'SMTP Port', type: 'text', placeholder: '587' },
+    { key: 'smtp_username', label: 'SMTP Username', type: 'text' },
+    { key: 'smtp_password', label: 'SMTP Password', type: 'password' },
+    { key: 'smtp_encryption', label: 'SMTP Encryption', type: 'text', placeholder: 'tls' },
+    { key: 'smtp_from_address', label: 'From Address', type: 'text', placeholder: 'noreply@example.com' },
+    { key: 'smtp_from_name', label: 'From Name', type: 'text', placeholder: 'RealDeal' },
+    { key: 'twilio_sid', label: 'Twilio SID', type: 'password' },
+    { key: 'twilio_auth_token', label: 'Twilio Auth Token', type: 'password' },
+    { key: 'twilio_from_number', label: 'Twilio From Number', type: 'text', placeholder: '+1234567890' },
 ];
 
 const defaultContent: Record<string, string> = {
@@ -48,7 +61,7 @@ export default function AdminSettings() {
 
     const [form, setForm] = useState<Record<string, string>>(() => {
         const initial: Record<string, string> = {};
-        for (const field of [...apiFields, ...contentFields]) {
+        for (const field of [...apiFields, ...contentFields, ...notificationFields]) {
             initial[field.key] = settings[field.key] || defaultContent[field.key] || '';
         }
         return initial;
@@ -62,10 +75,11 @@ export default function AdminSettings() {
         });
     };
 
-    const tabs: { key: Tab; label: string }[] = [
-        { key: 'api', label: 'API Keys' },
-        { key: 'content', label: 'Content' },
-    ];
+const tabs: { key: Tab; label: string }[] = [
+    { key: 'api', label: 'API Keys' },
+    { key: 'content', label: 'Content' },
+    { key: 'notifications', label: 'Notifications' },
+];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -107,6 +121,24 @@ export default function AdminSettings() {
                                     <input
                                         type={field.type}
                                         placeholder={field.placeholder}
+                                        value={form[field.key] || ''}
+                                        onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
+                                        className="w-full h-12 rounded-md border border-input bg-background px-4 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {activeTab === 'notifications' && (
+                        <div className="flex flex-col gap-6">
+                            <p className="text-sm text-muted-foreground">Configure SMTP for email sending and Twilio for SMS notifications.</p>
+                            {notificationFields.map((field) => (
+                                <div key={field.key}>
+                                    <label className="mb-1 block text-sm font-medium">{field.label}</label>
+                                    <input
+                                        type={field.type}
+                                        placeholder={field.placeholder ?? ''}
                                         value={form[field.key] || ''}
                                         onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                                         className="w-full h-12 rounded-md border border-input bg-background px-4 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

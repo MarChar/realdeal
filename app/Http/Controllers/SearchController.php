@@ -6,6 +6,7 @@ use App\Models\Property;
 use App\Services\TextSearchParser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SearchController extends Controller
 {
@@ -74,6 +75,15 @@ class SearchController extends Controller
             $dropped = array_diff(array_keys($filters), array_keys($applied));
             $dropped = array_values(array_filter($dropped, fn($k) => !empty($criteria[$k])));
 
+            $this->storeRecentSearch(
+                text: $validated['text'],
+                criteria: $criteria,
+                propertyIds: $results->pluck('id')->toArray(),
+                resultCount: $results->count(),
+                appliedFilters: $applied,
+                droppedFilters: $dropped,
+            );
+
             return back()->with('searchResults', [
                 'criteria' => $criteria,
                 'results' => $results->toArray(),
@@ -92,5 +102,67 @@ class SearchController extends Controller
                 'dropped_filters' => [],
             ]);
         }
+    }
+
+    public function recentSearches(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $searches = $this->getRecentSearches();
+
+        return response()->json([
+            'searches' => array_map(fn($s) => [
+                'id' => $s['id'],
+                'text' => Str::limit($s['text'], 60),
+                'result_count' => $s['result_count'],
+                'created_at' => $s['created_at'],
+            ], $searches),
+        ]);
+    }
+
+    public function getRecentSearch(Request $request, string $id): \Illuminate\Http\JsonResponse
+    {
+        $searches = $this->getRecentSearches();
+
+        $entry = collect($searches)->firstWhere('id', $id);
+        if (!$entry) {
+            return response()->json(['error' => 'Search not found'], 404);
+        }
+
+        $properties = Property::whereIn('id', $entry['property_ids'])->get();
+
+        return response()->json([
+            'criteria' => $entry['criteria'],
+            'results' => $properties->toArray(),
+            'count' => $entry['result_count'],
+            'applied_filters' => $entry['applied_filters'] ?? [],
+            'dropped_filters' => $entry['dropped_filters'] ?? [],
+        ]);
+    }
+
+    private function storeRecentSearch(string $text, array $criteria, array $propertyIds, int $resultCount, array $appliedFilters = [], array $droppedFilters = []): void
+    {
+        $sessionId = session()->getId();
+        $key = "recent_searches_{$sessionId}";
+        $searches = cache()->get($key, []);
+
+        $entry = [
+            'id' => (string) Str::uuid(),
+            'text' => $text,
+            'criteria' => $criteria,
+            'property_ids' => $propertyIds,
+            'applied_filters' => $appliedFilters,
+            'dropped_filters' => $droppedFilters,
+            'result_count' => $resultCount,
+            'created_at' => now()->toIso8601String(),
+        ];
+
+        array_unshift($searches, $entry);
+        $searches = array_slice($searches, 0, 20);
+        cache()->put($key, $searches, now()->addDays(2));
+    }
+
+    private function getRecentSearches(): array
+    {
+        $sessionId = session()->getId();
+        return cache()->get("recent_searches_{$sessionId}", []);
     }
 }

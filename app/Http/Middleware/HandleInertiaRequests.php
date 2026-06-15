@@ -22,6 +22,28 @@ class HandleInertiaRequests extends Middleware
 
         $contentSettings = Setting::where('key', 'like', 'content_%')->get()->pluck('value', 'key');
 
+        $notifications = null;
+        $unreadCount = 0;
+
+        if ($request->user()) {
+            $notifications = $request->user()
+                ->notifications()
+                ->latest()
+                ->take(5)
+                ->get()
+                ->map(fn ($n) => [
+                    'id' => $n->id,
+                    'title' => $n->data['title'] ?? 'Notification',
+                    'body' => $n->data['body'] ?? '',
+                    'icon' => $n->data['icon'] ?? 'Bell',
+                    'action_url' => $n->data['action_url'] ?? null,
+                    'read_at' => $n->read_at,
+                    'created_at' => $n->created_at,
+                ]);
+
+            $unreadCount = $request->user()->unreadNotifications()->count();
+        }
+
         return array_merge(parent::share($request), [
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
@@ -32,6 +54,8 @@ class HandleInertiaRequests extends Middleware
             'success' => $request->session()->get('success'),
             'searchResults' => $request->session()->get('searchResults'),
             'content' => $contentSettings,
+            'notifications' => $notifications,
+            'unread_notifications_count' => $unreadCount,
         ]);
     }
 }

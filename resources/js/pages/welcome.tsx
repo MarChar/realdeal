@@ -1,22 +1,22 @@
 import { Head, Link, usePage, router } from '@inertiajs/react';
-import { type SharedData } from '@/types';
-import { FormEventHandler, useState } from 'react';
+import { type SharedData, type SearchResultsData } from '@/types';
+import { FormEventHandler, useState, useCallback } from 'react';
 import UrlTab from '@/components/tabs/UrlTab';
 import TextTab from '@/components/tabs/TextTab';
+import RecentSearches from '@/components/tabs/RecentSearches';
 
 type Tab = 'url' | 'text';
-
-interface SearchResultsData {
-    criteria: Record<string, unknown>;
-    results: unknown[];
-    count: number;
-    error?: string;
-}
 
 interface ContentSettings {
     content_tab_ai_search_label?: string;
     content_tab_url_label?: string;
     content_homepage_tagline?: string;
+    content_tab_url_description?: string;
+    content_tab_url_placeholder?: string;
+    content_button_compare?: string;
+    content_tab_ai_search_description?: string;
+    content_tab_ai_search_placeholder?: string;
+    content_button_search?: string;
 }
 
 const defaultTabs: { key: Tab; label: string }[] = [
@@ -30,10 +30,13 @@ export default function Welcome() {
         searchResults?: SearchResultsData | null;
         content?: ContentSettings;
     }>().props;
+
     const [activeTab, setActiveTab] = useState<Tab>('text');
     const [url, setUrl] = useState('');
     const [textInput, setTextInput] = useState('');
     const [processing, setProcessing] = useState(false);
+    const [restoredResults, setRestoredResults] = useState<SearchResultsData | null>(null);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const contentSettings = (content ?? {}) as ContentSettings;
 
@@ -43,6 +46,8 @@ export default function Welcome() {
     ];
 
     const tagline = contentSettings.content_homepage_tagline || "Fill me from admin/settings page";
+
+    const displayedResults = restoredResults ?? searchResults ?? null;
 
     const handleCompare: FormEventHandler = (e) => {
         e.preventDefault();
@@ -54,10 +59,26 @@ export default function Welcome() {
         e.preventDefault();
         if (!textInput.trim()) return;
         setProcessing(true);
+        setRestoredResults(null);
         router.post('/search', { text: textInput.trim() }, {
-            onFinish: () => setProcessing(false),
+            onFinish: () => {
+                setProcessing(false);
+                setRefreshKey((k) => k + 1);
+            },
         });
     };
+
+    const handleRecentSearch = useCallback(async (id: string) => {
+        try {
+            const res = await fetch(`/recent-searches/${id}`);
+            if (!res.ok) return;
+            const data = await res.json();
+            setRestoredResults(data);
+            setActiveTab('text');
+        } catch {
+            // ignore
+        }
+    }, []);
 
     return (
         <>
@@ -99,9 +120,11 @@ export default function Welcome() {
                 </div>
             </nav>
 
-            <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:p-8 dark:bg-[#0a0a0a]">
-                <div className="flex w-full flex-1 items-start justify-center pt-12">
-                    <main className="flex w-full max-w-2xl flex-col items-center gap-8 px-4 text-center">
+            <div className="flex min-h-screen bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a]">
+                <RecentSearches onSelect={handleRecentSearch} refreshKey={refreshKey} />
+
+                <div className="flex-1 flex flex-col items-center pt-12 px-6 lg:px-8">
+                    <main className="flex w-full max-w-2xl flex-col items-center gap-8 text-center">
                         <h1 className="text-5xl font-bold tracking-tight lg:text-6xl">
                             Property Analyzer
                         </h1>
@@ -143,7 +166,7 @@ export default function Welcome() {
                                     value={textInput}
                                     onValueChange={setTextInput}
                                     onSubmit={handleTextSubmit}
-                                    searchResults={searchResults ?? null}
+                                    searchResults={displayedResults}
                                     processing={processing}
                                     content={contentSettings}
                                 />
