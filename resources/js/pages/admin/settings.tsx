@@ -21,6 +21,7 @@ const contentFields = [
     { key: 'content_tab_ai_search_label', label: 'AI Search Tab Label', type: 'text' },
     { key: 'content_tab_url_label', label: 'URL Tab Label', type: 'text' },
     { key: 'content_homepage_tagline', label: 'Homepage Tagline', type: 'textarea' },
+    { key: 'content_tab_ai_search_welcome', label: 'AI Search Welcome Message', type: 'textarea' },
     { key: 'content_tab_ai_search_description', label: 'AI Search Tab Description', type: 'textarea' },
     { key: 'content_tab_ai_search_placeholder', label: 'AI Search Textarea Placeholder', type: 'textarea' },
     { key: 'content_button_search', label: 'Search Button Text', type: 'text' },

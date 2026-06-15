@@ -1,11 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import { type SearchResultsData } from '@/types';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState, useEffect } from 'react';
 
 interface TextContentSettings {
     content_tab_ai_search_description?: string;
     content_tab_ai_search_placeholder?: string;
+    content_tab_ai_search_welcome?: string;
     content_button_search?: string;
 }
 
@@ -57,15 +58,57 @@ function formatValue(value: unknown): string {
     return String(value);
 }
 
+function TypewriterText({ text, speed = 30 }: { text: string; speed?: number }) {
+    const [displayed, setDisplayed] = useState('');
+    const [done, setDone] = useState(false);
+
+    useEffect(() => {
+        setDisplayed('');
+        setDone(false);
+        let i = 0;
+        const timer = setInterval(() => {
+            i++;
+            setDisplayed(text.slice(0, i));
+            if (i >= text.length) {
+                clearInterval(timer);
+                setDone(true);
+            }
+        }, speed);
+        return () => clearInterval(timer);
+    }, [text, speed]);
+
+    return (
+        <>
+            {displayed}<span className={done ? 'hidden' : 'inline-block h-4 w-0.5 animate-pulse bg-blue-600 ml-0.5'} />
+        </>
+    );
+}
+
 export default function TextTab({ value, onValueChange, onSubmit, searchResults, processing, content }: TextTabProps) {
     const c = content ?? {};
 
     const description = c.content_tab_ai_search_description || 'Fill me from admin/settings page';
     const placeholder = c.content_tab_ai_search_placeholder || 'Fill me from admin/settings page';
+    const welcomeMessage = c.content_tab_ai_search_welcome || 'Welcome to our property finder and analyzer tool. Describe your dream property and I will do my best to find the best fit.';
     const buttonText = c.content_button_search || 'Fill me from admin/settings page';
+
+    const showWelcome = !searchResults && !processing;
 
     return (
         <div className="flex flex-col w-full gap-6">
+            {showWelcome && (
+                <div className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50 p-5 text-left dark:border-blue-900 dark:bg-blue-950">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-bold">
+                        AI
+                    </div>
+                    <div>
+                        <p className="text-sm font-medium text-blue-900 dark:text-blue-200">
+                            <TypewriterText text={welcomeMessage} />
+                        </p>
+                    </div>
+                </div>
+            )}
+
             <p className="text-sm text-[#706f6c] dark:text-[#A1A09A] leading-relaxed">
                 {description}
             </p>
